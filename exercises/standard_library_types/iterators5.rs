@@ -10,7 +10,9 @@
 //
 // Make the code compile and the tests pass.
 
-// I AM NOT DONE
+// Check out the benchmarking attempt:
+// https://github.com/cinnamondev/benchmarkIterators
+
 
 use std::collections::HashMap;
 

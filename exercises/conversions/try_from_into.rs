@@ -34,8 +34,11 @@ enum IntoColorError {
 
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
-    type Error = IntoColorError;
+    type Error = IntoColorError; // this is a cool thing!
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        // potential issues
+        // i16 can be < 0!
+        // as a result
     }
 }
 

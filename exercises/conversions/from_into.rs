@@ -10,7 +10,7 @@ struct Person {
 // We implement the Default trait to use it as a fallback
 // when the provided string is not convertible into a Person object
 impl Default for Person {
-    fn default() -> Person {
+    fn default() -> Person {            // default person configuration
         Person {
             name: String::from("John"),
             age: 30,
@@ -33,10 +33,30 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
 
+// empty string or empty name on split - default.
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        let split:Vec<&str> = s.split(",").collect();
+
+        match split[..] {           // pattern matching is cool
+            [name, age] => {                    // Does it follow this pattern? (do not accept a,b,c or a, or any other likeness that isnt a,b)
+                match age.parse::<usize>() {               // Can this be parsed? (do not except Err option)
+                    Ok(age) => {
+                        if name.is_empty() {               // I don't like this bit. It'd be nice if
+                            Person::default()              // could just filter empty items but the
+                        } else {                           // tests don't like it if i ignore comma.
+                            Person {    // Make the Person
+                                name: name.to_string(),
+                                age,
+                            }
+                        }
+                    }
+                    Err(_) => Person::default() // Does not convert correctly.
+                }
+            }
+            _ => Person::default(), // Provide default option given this pattern is not satisfied.
+        }
     }
 }
 

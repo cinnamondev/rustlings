@@ -26,7 +26,6 @@ enum ParsePersonError {
     ParseInt(ParseIntError),
 }
 
-// I AM NOT DONE
 
 // Steps:
 // 1. If the length of the provided string is 0, an error should be returned
@@ -41,6 +40,27 @@ enum ParsePersonError {
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        let split:Vec<&str> = s.split(",").collect();
+
+        match split[..] {           // pattern matching is cool
+            [name, age] => {                    // Does it follow this pattern? (do not accept a,b,c or a, or any other likeness that isnt a,b)
+                match age.parse::<usize>() {               // Can this be parsed? (do not except Err option)
+                    Ok(age) => {
+                        if name.is_empty() {               // I don't like this bit. It'd be nice if
+                            Err(ParsePersonError::NoName)              // could just filter empty items but the
+                        } else {                           // tests don't like it if i ignore comma.
+                            Ok(Person {    // Make the Person
+                                name: name.to_string(),
+                                age,
+                            })
+                        }
+                    }
+                    Err(e) => Err(ParsePersonError::ParseInt(e)) // Does not convert correctly.
+                }
+            }
+            [""] => Err(ParsePersonError::Empty),
+            _ => Err(ParsePersonError::BadLen), // Provide default option given this pattern is not satisfied.
+        }
     }
 }
 
