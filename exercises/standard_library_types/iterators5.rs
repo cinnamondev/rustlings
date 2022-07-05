@@ -34,6 +34,7 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
     // map is a hashmap with String keys and Progress values.
     // map = { "variables1": Complete, "from_str": None, ... }
+    map.iter().filter(|v| v.1 == &value ).count()
 }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
@@ -52,6 +53,30 @@ fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Pr
     // collection is a slice of hashmaps.
     // collection = [{ "variables1": Complete, "from_str": None, ... },
     //     { "variables2": Complete, ... }, ... ]
+
+    // hm...
+    // so for each item in thing, add up thing then sum? if we take count of each
+    // til about fold!! wow! so we have fn fold that takes initial value and a fn thingymajigy!
+    // we have an acculumator argument (cool) that is alive for the whole time and another that ends up being the current value.
+    // so cool!
+    //collection.iter()
+    //    .fold(0, |acc,hash|
+    //        acc + hash.iter().filter(|v| v.1 == &value).count()
+    //    )
+    // Okay... so i wanted to see how could do it with fold but it seems like there are other ways to do it that are better... lets try those?
+    // This one uses flatten, which is cool because it can simplify nested data structures like [[a,b],[c,d]] into [a,b,c,d]. So we make the array iterable, flatten all the hash maps into one,
+    // then use normal filters and counts like before.
+    collection.iter()
+        .flatten()
+        .filter(|(_,progress)| *progress == &value)
+        .count();
+
+    // This one also LOOKS like but it seems slow? your iterating each hashmap to then filter and count?? feels no better than the first approach.
+    collection.iter()
+        .map(|hash| count_iterator(hash,value))
+        .sum()
+    //collection.iter().fold(0, |acc,hash| acc + hash.iter().count())
+    //collection.iter().flatten();
 }
 
 #[cfg(test)]

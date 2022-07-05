@@ -18,20 +18,18 @@
 // where the second TODO comment is. Try not to create any copies of the `numbers` Vec!
 // Execute `rustlings hint arc1` for hints :)
 
-// I AM NOT DONE
-
 #![forbid(unused_imports)] // Do not change this, (or the next) line.
 use std::sync::Arc;
 use std::thread;
 
 fn main() {
     let numbers: Vec<_> = (0..100u32).collect();
-    let shared_numbers = // TODO
+    let shared_numbers = Arc::new(numbers); // Create a Atomic Reference Counter for sharing ownership of numbers across many threads.
     let mut joinhandles = Vec::new();
 
     for offset in 0..8 {
-        let child_numbers = // TODO
-        joinhandles.push(thread::spawn(move || {
+        let child_numbers = shared_numbers.clone();     // .clone() is strangeish. It copies the *pointer*, allowing shared ownership.
+        joinhandles.push(thread::spawn(move || {                                        // perform operation on thread.
             let sum: u32 = child_numbers.iter().filter(|n| *n % 8 == offset).sum();
             println!("Sum of offset {} is {}", offset, sum);
         }));

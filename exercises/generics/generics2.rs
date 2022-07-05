@@ -3,14 +3,13 @@
 
 // Execute `rustlings hint generics2` for hints!
 
-// I AM NOT DONE
-
-struct Wrapper {
-    value: u32,
+// By using <T>, we can say that wrapper can be specified for any type T. type customisable :)
+struct Wrapper<T> {
+    value: T,
 }
-
-impl Wrapper {
-    pub fn new(value: u32) -> Self {
+// i dont like that you have to write it twice...
+impl<T> Wrapper<T> {
+    pub fn new(value: T) -> Self {
         Wrapper { value }
     }
 }
