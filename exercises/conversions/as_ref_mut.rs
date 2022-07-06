@@ -2,17 +2,19 @@
 // Read more about them at https://doc.rust-lang.org/std/convert/trait.AsRef.html
 // and https://doc.rust-lang.org/std/convert/trait.AsMut.html, respectively.
 
-// I AM NOT DONE
 
 // Obtain the number of bytes (not characters) in the given argument
 // Add the AsRef trait appropriately as a trait bound
-fn byte_counter<T>(arg: T) -> usize {
-    arg.as_ref().as_bytes().len()
-}
+
+            // For type T that implements AsRef for str (base) type. This means &str, String, etc... at a base level all of them implement `str`
+fn byte_counter<T: AsRef<str>>(arg: T) -> usize {       // what we are essentially saying here is we can refer to another type as long as the AsRef trait is implemented for that type.
+    arg.as_ref().as_bytes().len()                       // as a more succinct example, if we had a struct describing String, we could impl AsRef<str> such that it could take that String value
+}                                                       // This simple example can expand to more complex examples converting simular tyeps ie String -> AsRef<Path>.
+
 
 // Obtain the number of characters (not bytes) in the given argument
 // Add the AsRef trait appropriately as a trait bound
-fn char_counter<T>(arg: T) -> usize {
+fn char_counter<T: AsRef<str>>(arg: T) -> usize {
     arg.as_ref().chars().count()
 }
 

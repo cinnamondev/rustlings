@@ -21,8 +21,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
 // You need to create an implementation for a tuple of three integers,
@@ -38,7 +36,22 @@ impl TryFrom<(i16, i16, i16)> for Color {
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
         // potential issues
         // i16 can be < 0!
-        // as a result
+        // i16 can also be > 255,
+        // and we dont want that.
+        // like the last exercise (from_str)
+        // we can pattern match a Slice/tuple!
+        match tuple {
+            (r@0..=255, g@0..=255, b@0..=255 ) => {
+                Ok(
+                    Color {
+                        red: r as u8,
+                        green: g as u8,
+                        blue: b as u8,
+                    }
+                )
+            }
+            _ => Err(IntoColorError::IntConversion) // Default case
+        }
     }
 }
 
@@ -46,6 +59,18 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        match arr {
+            [r@0..=255, g@0..=255, b@0..=255 ] => {
+                Ok(
+                    Color {
+                        red: r as u8,
+                        green: g as u8,
+                        blue: b as u8,
+                    }
+                )
+            }
+            _ => Err(IntoColorError::IntConversion) // Default case
+        }
     }
 }
 
@@ -53,6 +78,19 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        match slice {
+            &[r@0..=255, g@0..=255, b@0..=255 ] => {
+                Ok(
+                    Color {
+                        red: r as u8,
+                        green: g as u8,
+                        blue: b as u8,
+                    }
+                )
+            }
+            [_,_,_] => Err(IntoColorError::IntConversion), // correct len
+            _ => Err(IntoColorError::BadLen) // incorrect len
+        }
     }
 }
 
